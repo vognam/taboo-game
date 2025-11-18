@@ -374,55 +374,77 @@
 @media (max-width: 768px) {
   .game-container {
     padding: 10px;
+    min-height: 100vh;
+    justify-content: center;
+  }
+
+  .game-header {
+    margin-bottom: 15px;
   }
 
   .game-card {
-    padding: 25px;
+    padding: 20px;
     border-radius: 15px;
+    margin-bottom: 0;
+  }
+
+  .card-header {
+    margin-bottom: 15px;
   }
 
   .main-word {
-    font-size: 2.2rem;
-    padding: 20px 10px;
+    font-size: 2rem;
+    padding: 15px 10px;
+    margin: 15px 0;
   }
 
   .card-title {
+    font-size: 0.95rem;
+  }
+
+  .taboo-section {
+    margin: 20px 0;
+  }
+
+  .taboo-header {
+    margin-bottom: 12px;
     font-size: 1rem;
   }
 
   .taboo-words {
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    gap: 8px;
   }
 
   .taboo-word {
-    padding: 10px 14px;
-    font-size: 0.95rem;
+    padding: 8px 12px;
+    font-size: 0.9rem;
   }
 
   .button-group {
     gap: 10px;
+    margin-top: 20px;
   }
 
   .game-button {
-    padding: 14px;
-    font-size: 1rem;
+    padding: 12px;
+    font-size: 0.95rem;
   }
 
   .header-stats {
-    gap: 8px;
-    flex-wrap: wrap;
+    gap: 6px;
+    flex-wrap: nowrap;
   }
 
   .timer {
-    font-size: 1.2rem;
-    padding: 6px 15px;
-    min-width: 70px;
+    font-size: 1rem;
+    padding: 5px 10px;
+    min-width: 55px;
   }
 
   .skips-counter {
-    font-size: 1rem;
-    padding: 6px 12px;
+    font-size: 0.85rem;
+    padding: 5px 10px;
   }
 
   .progress-text {
@@ -430,20 +452,33 @@
   }
 
   .cycling-banner {
-    padding: 12px 20px;
+    padding: 8px 15px;
     margin-bottom: 15px;
+    align-items: center;
+    gap: 10px;
   }
 
   .cycling-icon {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+  }
+
+  .cycling-text {
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
   }
 
   .cycling-text strong {
-    font-size: 1rem;
+    font-size: 0.85rem;
   }
 
   .cycling-text span {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    opacity: 1;
+  }
+
+  .cycling-text span::before {
+    content: '- ';
   }
 
   /* Hide bottom score display on mobile */
@@ -454,30 +489,28 @@
   /* Show inline score display in header on mobile */
   .score-display-inline {
     display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    width: 100%;
+    gap: 6px;
     order: -1;
   }
 
   .score-item-inline {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
     background: rgba(255, 255, 255, 0.2);
-    padding: 6px 12px;
+    padding: 5px 10px;
     border-radius: 10px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
 
   .score-item-inline .score-label {
     color: white;
     font-weight: 500;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
   }
 
   .score-item-inline .score-value {
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: bold;
   }
 
@@ -505,54 +538,90 @@
 }
 
 @media (max-width: 480px) {
+  .game-container {
+    padding: 8px;
+  }
+
+  .game-header {
+    margin-bottom: 12px;
+  }
+
   .game-card {
-    padding: 20px;
+    padding: 18px;
+  }
+
+  .card-header {
+    margin-bottom: 12px;
   }
 
   .main-word {
-    font-size: 1.8rem;
-    padding: 15px 10px;
+    font-size: 1.7rem;
+    padding: 12px 8px;
+    margin: 12px 0;
   }
 
   .card-title {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+  }
+
+  .taboo-section {
+    margin: 18px 0;
   }
 
   .taboo-header {
-    font-size: 1rem;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
   }
 
   .taboo-word {
-    padding: 8px 12px;
-    font-size: 0.9rem;
+    padding: 7px 10px;
+    font-size: 0.85rem;
+  }
+
+  .button-group {
+    margin-top: 18px;
   }
 
   .game-button {
-    padding: 12px;
-    font-size: 0.95rem;
+    padding: 10px;
+    font-size: 0.9rem;
   }
 
   .timer {
-    font-size: 1.1rem;
-    padding: 5px 12px;
-    min-width: 60px;
+    font-size: 0.9rem;
+    padding: 4px 8px;
+    min-width: 50px;
   }
 
   .skips-counter {
+    font-size: 0.8rem;
+    padding: 4px 8px;
+  }
+
+  .score-item-inline {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+  }
+
+  .score-item-inline .score-label {
+    font-size: 0.75rem;
+  }
+
+  .score-item-inline .score-value {
     font-size: 0.9rem;
-    padding: 5px 10px;
   }
 
   .cycling-banner {
-    padding: 10px 15px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
   }
 
   .cycling-icon {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 
   .cycling-text strong {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
   }
 
   .cycling-text span {
