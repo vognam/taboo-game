@@ -167,13 +167,6 @@ function Home({ onStartGame }) {
               1m
             </button>
             <button
-              className={`time-limit-btn ${timeLimit === 120 ? 'active' : ''}`}
-              onClick={() => setTimeLimit(120)}
-              disabled={loading}
-            >
-              2m
-            </button>
-            <button
               className={`time-limit-btn ${timeLimit === null ? 'active' : ''}`}
               onClick={() => setTimeLimit(null)}
               disabled={loading}
@@ -221,22 +214,29 @@ function Home({ onStartGame }) {
             </div>
 
             <div className="form-group">
-              <label>
-                Number of Taboo Words: <span className="slider-value">{tabooWordCount}</span>
-              </label>
-              <input
-                type="range"
-                min="0"
-                max="10"
-                value={tabooWordCount}
-                onChange={(e) => setTabooWordCount(Number(e.target.value))}
-                className="taboo-slider"
-                disabled={loading}
-              />
-              <div className="slider-labels">
-                <span>0</span>
-                <span>5</span>
-                <span>10</span>
+              <label>Number of Taboo Words</label>
+              <div className="taboo-word-count-buttons">
+                <button
+                  className={`taboo-word-count-btn ${tabooWordCount === 0 ? 'active' : ''}`}
+                  onClick={() => setTabooWordCount(0)}
+                  disabled={loading}
+                >
+                  0
+                </button>
+                <button
+                  className={`taboo-word-count-btn ${tabooWordCount === 5 ? 'active' : ''}`}
+                  onClick={() => setTabooWordCount(5)}
+                  disabled={loading}
+                >
+                  5
+                </button>
+                <button
+                  className={`taboo-word-count-btn ${tabooWordCount === 10 ? 'active' : ''}`}
+                  onClick={() => setTabooWordCount(10)}
+                  disabled={loading}
+                >
+                  10
+                </button>
               </div>
             </div>
 
@@ -302,8 +302,8 @@ function Home({ onStartGame }) {
 
         <div className="info-box">
           <p>
-            <strong>How to play:</strong> You'll see {wordCount} cards with a word and {tabooWordCount} taboo word{tabooWordCount !== 1 ? 's' : ''}.
-            Describe the main word to your team without saying any of the taboo words!
+            <strong>How to play:</strong> Describe the main word to your team without saying any of the taboo words!
+            {tabooWordCount === 0 && ' No taboo words for extra easy mode.'}
           </p>
         </div>
       </div>
