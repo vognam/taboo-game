@@ -42,6 +42,12 @@
   font-size: 0.95rem;
 }
 
+.header-stats {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
 .timer {
   color: white;
   font-weight: 700;
@@ -52,6 +58,22 @@
   min-width: 80px;
   text-align: center;
   transition: all 0.3s ease;
+}
+
+.skips-counter {
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 10px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.skips-depleted {
+  background: #ff6b6b;
+  animation: pulse 1s ease-in-out infinite;
 }
 
 .timer-warning {
@@ -66,6 +88,51 @@
   50% {
     transform: scale(1.05);
   }
+}
+
+/* Cycling Mode Banner */
+.cycling-banner {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: linear-gradient(135deg, #ff9800 0%, #ff6b6b 100%);
+  color: white;
+  padding: 15px 25px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+  animation: slideIn 0.3s ease;
+}
+
+.cycling-icon {
+  font-size: 2rem;
+  animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.cycling-text {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.cycling-text strong {
+  font-size: 1.1rem;
+}
+
+.cycling-text span {
+  font-size: 0.9rem;
+  opacity: 0.9;
 }
 
 .game-card {
@@ -167,10 +234,17 @@
   color: #666;
 }
 
-.skip-button:hover {
+.skip-button:hover:not(:disabled) {
   background: #e0e0e0;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.skip-button:disabled {
+  background: #fcc;
+  color: #c33;
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 .correct-button {
@@ -181,6 +255,10 @@
 .correct-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+.score-display-inline {
+  display: none;
 }
 
 .score-display {
@@ -292,21 +370,216 @@
   box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
 }
 
-@media (max-width: 600px) {
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .game-container {
+    padding: 10px;
+  }
+
+  .game-card {
+    padding: 25px;
+    border-radius: 15px;
+  }
+
   .main-word {
-    font-size: 2rem;
+    font-size: 2.2rem;
+    padding: 20px 10px;
+  }
+
+  .card-title {
+    font-size: 1rem;
   }
 
   .taboo-words {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .taboo-word {
+    padding: 10px 14px;
+    font-size: 0.95rem;
+  }
+
+  .button-group {
+    gap: 10px;
+  }
+
+  .game-button {
+    padding: 14px;
+    font-size: 1rem;
+  }
+
+  .header-stats {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .timer {
+    font-size: 1.2rem;
+    padding: 6px 15px;
+    min-width: 70px;
+  }
+
+  .skips-counter {
+    font-size: 1rem;
+    padding: 6px 12px;
+  }
+
+  .progress-text {
+    font-size: 0.85rem;
+  }
+
+  .cycling-banner {
+    padding: 12px 20px;
+    margin-bottom: 15px;
+  }
+
+  .cycling-icon {
+    font-size: 1.5rem;
+  }
+
+  .cycling-text strong {
+    font-size: 1rem;
+  }
+
+  .cycling-text span {
+    font-size: 0.85rem;
+  }
+
+  /* Hide bottom score display on mobile */
+  .score-display.desktop-only {
+    display: none;
+  }
+
+  /* Show inline score display in header on mobile */
+  .score-display-inline {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    width: 100%;
+    order: -1;
+  }
+
+  .score-item-inline {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+  }
+
+  .score-item-inline .score-label {
+    color: white;
+    font-weight: 500;
+    font-size: 0.85rem;
+  }
+
+  .score-item-inline .score-value {
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
+
+  .score-value {
+    font-size: 1.3rem;
+  }
+
+  .summary-title {
+    font-size: 2rem;
   }
 
   .summary-stats {
     grid-template-columns: 1fr;
+    gap: 15px;
   }
 
-  .score-display {
+  .stat-value {
+    font-size: 2rem;
+  }
+
+  .summary-message {
+    font-size: 1.1rem;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-card {
+    padding: 20px;
+  }
+
+  .main-word {
+    font-size: 1.8rem;
+    padding: 15px 10px;
+  }
+
+  .card-title {
+    font-size: 0.95rem;
+  }
+
+  .taboo-header {
+    font-size: 1rem;
+  }
+
+  .taboo-word {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+
+  .game-button {
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+
+  .timer {
+    font-size: 1.1rem;
+    padding: 5px 12px;
+    min-width: 60px;
+  }
+
+  .skips-counter {
+    font-size: 0.9rem;
+    padding: 5px 10px;
+  }
+
+  .cycling-banner {
+    padding: 10px 15px;
+  }
+
+  .cycling-icon {
+    font-size: 1.2rem;
+  }
+
+  .cycling-text strong {
+    font-size: 0.9rem;
+  }
+
+  .cycling-text span {
+    font-size: 0.75rem;
+  }
+
+  .summary-title {
+    font-size: 1.6rem;
+  }
+
+  .stat-value {
+    font-size: 1.8rem;
+  }
+
+  .summary-message {
+    font-size: 1rem;
+    padding: 12px;
+  }
+
+  .header-info {
     flex-direction: column;
-    gap: 15px;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .header-stats {
+    width: 100%;
+    justify-content: flex-start;
   }
 }

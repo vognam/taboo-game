@@ -1,17 +1,69 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './Home.css';
 
+// Helper functions for localStorage
+const getStoredValue = (key, defaultValue) => {
+  try {
+    const item = window.localStorage.getItem(key);
+    return item ? JSON.parse(item) : defaultValue;
+  } catch (error) {
+    console.error(`Error reading ${key} from localStorage:`, error);
+    return defaultValue;
+  }
+};
+
+const setStoredValue = (key, value) => {
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    console.error(`Error writing ${key} to localStorage:`, error);
+  }
+};
+
 function Home({ onStartGame }) {
-  const [category, setCategory] = useState('general');
-  const [difficulty, setDifficulty] = useState('medium');
-  const [timeLimit, setTimeLimit] = useState(null); // null = infinite
-  const [wordCount, setWordCount] = useState(20);
-  const [tabooWordCount, setTabooWordCount] = useState(5);
+  const [category, setCategory] = useState(() => getStoredValue('taboo_category', 'general'));
+  const [difficulty, setDifficulty] = useState(() => getStoredValue('taboo_difficulty', 'medium'));
+  const [timeLimit, setTimeLimit] = useState(() => getStoredValue('taboo_timeLimit', null));
+  const [wordCount, setWordCount] = useState(() => getStoredValue('taboo_wordCount', 20));
+  const [tabooWordCount, setTabooWordCount] = useState(() => getStoredValue('taboo_tabooWordCount', 5));
+  const [maxSkips, setMaxSkips] = useState(() => getStoredValue('taboo_maxSkips', null));
+  const [devMode, setDevMode] = useState(() => getStoredValue('taboo_devMode', false));
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+  // Save settings to localStorage whenever they change
+  useEffect(() => {
+    setStoredValue('taboo_category', category);
+  }, [category]);
+
+  useEffect(() => {
+    setStoredValue('taboo_difficulty', difficulty);
+  }, [difficulty]);
+
+  useEffect(() => {
+    setStoredValue('taboo_timeLimit', timeLimit);
+  }, [timeLimit]);
+
+  useEffect(() => {
+    setStoredValue('taboo_wordCount', wordCount);
+  }, [wordCount]);
+
+  useEffect(() => {
+    setStoredValue('taboo_tabooWordCount', tabooWordCount);
+  }, [tabooWordCount]);
+
+  useEffect(() => {
+    setStoredValue('taboo_maxSkips', maxSkips);
+  }, [maxSkips]);
+
+  useEffect(() => {
+    setStoredValue('taboo_devMode', devMode);
+  }, [devMode]);
+
   const handleStartGame = async () => {
-    if (!category.trim()) {
+    if (!devMode && !category.trim()) {
       setError('Please enter a category');
       return;
     }
@@ -20,7 +72,7 @@ function Home({ onStartGame }) {
     setLoading(true);
 
     try {
-      await onStartGame(category.trim(), difficulty, wordCount, timeLimit, tabooWordCount);
+      await onStartGame(category.trim(), difficulty, wordCount, timeLimit, tabooWordCount, maxSkips, devMode);
     } catch (err) {
       setError(err.message || 'Failed to start game. Please try again.');
     } finally {
@@ -35,6 +87,21 @@ function Home({ onStartGame }) {
         <p className="home-subtitle">
           Test your word skills! Describe the word without using the taboo words.
         </p>
+
+        {isLocalhost && (
+          <div className="dev-mode-toggle">
+            <label className="toggle-label">
+              <input
+                type="checkbox"
+                checked={devMode}
+                onChange={(e) => setDevMode(e.target.checked)}
+                className="toggle-checkbox"
+              />
+              <span className="toggle-slider"></span>
+              <span className="toggle-text">Dev Mode (Use Mock Data)</span>
+            </label>
+          </div>
+        )}
 
         <div className="form-group">
           <label htmlFor="category">Category</label>
@@ -170,6 +237,54 @@ function Home({ onStartGame }) {
                 <span>0</span>
                 <span>5</span>
                 <span>10</span>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>Max Skips Allowed</label>
+              <div className="max-skips-buttons">
+                <button
+                  className={`max-skips-btn ${maxSkips === 0 ? 'active' : ''}`}
+                  onClick={() => setMaxSkips(0)}
+                  disabled={loading}
+                >
+                  0
+                </button>
+                <button
+                  className={`max-skips-btn ${maxSkips === 1 ? 'active' : ''}`}
+                  onClick={() => setMaxSkips(1)}
+                  disabled={loading}
+                >
+                  1
+                </button>
+                <button
+                  className={`max-skips-btn ${maxSkips === 2 ? 'active' : ''}`}
+                  onClick={() => setMaxSkips(2)}
+                  disabled={loading}
+                >
+                  2
+                </button>
+                <button
+                  className={`max-skips-btn ${maxSkips === 3 ? 'active' : ''}`}
+                  onClick={() => setMaxSkips(3)}
+                  disabled={loading}
+                >
+                  3
+                </button>
+                <button
+                  className={`max-skips-btn ${maxSkips === 5 ? 'active' : ''}`}
+                  onClick={() => setMaxSkips(5)}
+                  disabled={loading}
+                >
+                  5
+                </button>
+                <button
+                  className={`max-skips-btn ${maxSkips === null ? 'active' : ''}`}
+                  onClick={() => setMaxSkips(null)}
+                  disabled={loading}
+                >
+                  ∞
+                </button>
               </div>
             </div>
           </div>

@@ -1,0 +1,82 @@
+[
+  {
+    "word": "Ocean",
+    "tabooWords": ["Water", "Sea", "Blue", "Fish", "Waves", "Salt", "Deep", "Beach", "Marine", "Tide"]
+  },
+  {
+    "word": "Computer",
+    "tabooWords": ["Technology", "Keyboard", "Screen", "Mouse", "Software", "Hardware", "Internet", "Digital", "Program", "Machine"]
+  },
+  {
+    "word": "Pizza",
+    "tabooWords": ["Cheese", "Italy", "Dough", "Slice", "Pepperoni", "Tomato", "Oven", "Restaurant", "Delivery", "Crust"]
+  },
+  {
+    "word": "Basketball",
+    "tabooWords": ["Sport", "Hoop", "Court", "Dribble", "Jump", "Ball", "Team", "NBA", "Score", "Player"]
+  },
+  {
+    "word": "Coffee",
+    "tabooWords": ["Caffeine", "Bean", "Drink", "Morning", "Cup", "Espresso", "Hot", "Brew", "Starbucks", "Mug"]
+  },
+  {
+    "word": "Guitar",
+    "tabooWords": ["Music", "String", "Instrument", "Rock", "Play", "Sound", "Acoustic", "Electric", "Chord", "Strum"]
+  },
+  {
+    "word": "Book",
+    "tabooWords": ["Read", "Page", "Story", "Author", "Novel", "Library", "Chapter", "Write", "Paper", "Text"]
+  },
+  {
+    "word": "Airplane",
+    "tabooWords": ["Fly", "Sky", "Pilot", "Wings", "Airport", "Travel", "Jet", "Flight", "Passenger", "Takeoff"]
+  },
+  {
+    "word": "Camera",
+    "tabooWords": ["Photo", "Picture", "Lens", "Click", "Image", "Film", "Capture", "Digital", "Snapshot", "Flash"]
+  },
+  {
+    "word": "Mountain",
+    "tabooWords": ["Peak", "High", "Climb", "Hill", "Rock", "Summit", "Elevation", "Range", "Alps", "Snow"]
+  },
+  {
+    "word": "Hospital",
+    "tabooWords": ["Doctor", "Nurse", "Patient", "Sick", "Medical", "Emergency", "Health", "Clinic", "Treatment", "Medicine"]
+  },
+  {
+    "word": "Birthday",
+    "tabooWords": ["Party", "Cake", "Candles", "Gift", "Celebrate", "Age", "Year", "Anniversary", "Born", "Special"]
+  },
+  {
+    "word": "Telephone",
+    "tabooWords": ["Call", "Ring", "Mobile", "Phone", "Dial", "Talk", "Number", "Communication", "Device", "Smartphone"]
+  },
+  {
+    "word": "Garden",
+    "tabooWords": ["Plant", "Flower", "Grow", "Green", "Soil", "Yard", "Vegetable", "Outdoor", "Nature", "Lawn"]
+  },
+  {
+    "word": "Movie",
+    "tabooWords": ["Film", "Cinema", "Theater", "Watch", "Actor", "Screen", "Hollywood", "Director", "Scene", "Entertainment"]
+  },
+  {
+    "word": "Bicycle",
+    "tabooWords": ["Ride", "Wheel", "Pedal", "Bike", "Cycle", "Chain", "Handlebar", "Speed", "Road", "Two"]
+  },
+  {
+    "word": "Restaurant",
+    "tabooWords": ["Food", "Eat", "Menu", "Waiter", "Dine", "Kitchen", "Chef", "Table", "Order", "Meal"]
+  },
+  {
+    "word": "Umbrella",
+    "tabooWords": ["Rain", "Protect", "Open", "Weather", "Cover", "Wet", "Shelter", "Handle", "Storm", "Portable"]
+  },
+  {
+    "word": "Painting",
+    "tabooWords": ["Art", "Canvas", "Brush", "Color", "Picture", "Artist", "Paint", "Draw", "Museum", "Frame"]
+  },
+  {
+    "word": "Chocolate",
+    "tabooWords": ["Sweet", "Candy", "Brown", "Dessert", "Cocoa", "Taste", "Eat", "Bar", "Sugar", "Treat"]
+  }
+]

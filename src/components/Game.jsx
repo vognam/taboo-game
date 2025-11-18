@@ -1,16 +1,29 @@
 import { useState, useEffect } from 'react';
 import './Game.css';
 
-function Game({ words, timeLimit, onEndGame }) {
+function Game({ words, timeLimit, maxSkips, onEndGame }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [skippedCount, setSkippedCount] = useState(0);
   const [gameEnded, setGameEnded] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(timeLimit);
+  const [skippedCards, setSkippedCards] = useState([]); // Array of skipped card indices
+  const [cyclingMode, setCyclingMode] = useState(false); // Are we cycling through skipped cards?
+  const [cycleIndex, setCycleIndex] = useState(0); // Current position in skipped cards array
+  const [visitedCards, setVisitedCards] = useState([0]); // Track which cards have been visited
 
-  const currentWord = words[currentIndex];
+  // Safety check for cycle index
+  const safeCycleIndex = cyclingMode && cycleIndex >= skippedCards.length
+    ? 0
+    : cycleIndex;
+
+  const currentWord = cyclingMode
+    ? words[skippedCards[safeCycleIndex]]
+    : words[currentIndex];
   const progress = currentIndex + 1;
   const totalWords = words.length;
+  const skipsRemaining = maxSkips !== null ? maxSkips - skippedCount : null;
+  const canSkip = maxSkips === null || skippedCount < maxSkips;
 
   // Timer effect
   useEffect(() => {
@@ -32,19 +45,96 @@ function Game({ words, timeLimit, onEndGame }) {
 
   const handleCorrect = () => {
     setCorrectCount(correctCount + 1);
-    moveToNext();
+
+    if (cyclingMode) {
+      // Got a card correct during cycling mode
+      const correctCardIndex = skippedCards[safeCycleIndex];
+      const isCurrentCard = correctCardIndex === currentIndex;
+
+      // Remove this card from skipped pool
+      const newSkippedCards = skippedCards.filter((_, i) => i !== safeCycleIndex);
+      setSkippedCards(newSkippedCards);
+
+      // Regain skip only if this was NOT the current card (i.e., it was actually skipped before)
+      if (!isCurrentCard) {
+        setSkippedCount(skippedCount - 1);
+      }
+
+      // Check if there are more skipped cards or unvisited cards
+      if (newSkippedCards.length === 0) {
+        // No more skipped cards
+        setCyclingMode(false);
+        setCycleIndex(0);
+
+        // Check if we have unvisited cards
+        const hasUnvisitedCards = currentIndex + 1 < totalWords &&
+          !visitedCards.includes(currentIndex + 1);
+
+        if (isCurrentCard) {
+          // Current card was correct - try to move to next
+          moveToNext();
+        } else if (!hasUnvisitedCards) {
+          // Was a skipped card and no unvisited cards left - end game
+          setGameEnded(true);
+        }
+        // Otherwise stay at currentIndex to return to where we left off
+      } else {
+        // Still have skipped cards - stay in cycling mode
+        if (isCurrentCard) {
+          // Current card was correct - stay in cycle mode with remaining skipped cards
+          setCycleIndex(0);
+        } else {
+          // Was a skipped card - exit cycling and return to current card
+          setCyclingMode(false);
+          setCycleIndex(0);
+        }
+      }
+    } else {
+      moveToNext();
+    }
   };
 
   const handleSkip = () => {
-    setSkippedCount(skippedCount + 1);
-    moveToNext();
+    if (!canSkip && !cyclingMode) {
+      // Skip limit reached - add current card to skipped pool (if not already there) and enter cycling mode
+      if (!skippedCards.includes(currentIndex)) {
+        setSkippedCards([...skippedCards, currentIndex]);
+      }
+      setCyclingMode(true);
+      setCycleIndex(0);
+    } else if (cyclingMode) {
+      // Already in cycling mode - just move to next skipped card
+      const nextIndex = (cycleIndex + 1) % skippedCards.length;
+      setCycleIndex(nextIndex);
+    } else {
+      // Normal skip
+      setSkippedCount(skippedCount + 1);
+      if (!skippedCards.includes(currentIndex)) {
+        setSkippedCards([...skippedCards, currentIndex]);
+      }
+      moveToNext();
+    }
   };
 
   const moveToNext = () => {
-    if (currentIndex < totalWords - 1) {
-      setCurrentIndex(currentIndex + 1);
+    // Find next unvisited card
+    let nextIndex = currentIndex + 1;
+    while (nextIndex < totalWords && visitedCards.includes(nextIndex)) {
+      nextIndex++;
+    }
+
+    if (nextIndex < totalWords) {
+      setCurrentIndex(nextIndex);
+      setVisitedCards([...visitedCards, nextIndex]);
     } else {
-      setGameEnded(true);
+      // No more unvisited cards
+      if (skippedCards.length > 0 && !cyclingMode) {
+        // Still have skipped cards - enter cycling mode
+        setCyclingMode(true);
+        setCycleIndex(0);
+      } else {
+        setGameEnded(true);
+      }
     }
   };
 
@@ -111,13 +201,40 @@ function Game({ words, timeLimit, onEndGame }) {
           <div className="progress-text">
             Card {progress} of {totalWords}
           </div>
-          {timeLimit !== null && (
-            <div className={`timer ${timeRemaining <= 10 ? 'timer-warning' : ''}`}>
-              {formatTime(timeRemaining)}
+          <div className="header-stats">
+            <div className="score-display-inline">
+              <div className="score-item-inline">
+                <span className="score-label">Correct:</span>
+                <span className="score-value correct">{correctCount}</span>
+              </div>
+              <div className="score-item-inline">
+                <span className="score-label">Skipped:</span>
+                <span className="score-value skipped">{skippedCount}</span>
+              </div>
             </div>
-          )}
+            {timeLimit !== null && (
+              <div className={`timer ${timeRemaining <= 10 ? 'timer-warning' : ''}`}>
+                {formatTime(timeRemaining)}
+              </div>
+            )}
+            {maxSkips !== null && (
+              <div className={`skips-counter ${skipsRemaining === 0 ? 'skips-depleted' : ''}`}>
+                Skips: {skipsRemaining}
+              </div>
+            )}
+          </div>
         </div>
       </div>
+
+      {cyclingMode && (
+        <div className="cycling-banner">
+          <div className="cycling-icon">🔄</div>
+          <div className="cycling-text">
+            <strong>Reviewing Skipped Cards</strong>
+            <span>Card {safeCycleIndex + 1} of {skippedCards.length} skipped cards</span>
+          </div>
+        </div>
+      )}
 
       <div className="game-card">
         <div className="card-header">
@@ -138,8 +255,13 @@ function Game({ words, timeLimit, onEndGame }) {
         </div>
 
         <div className="button-group">
-          <button className="game-button skip-button" onClick={handleSkip}>
-            Skip
+          <button
+            className="game-button skip-button"
+            onClick={handleSkip}
+            disabled={!canSkip && !cyclingMode && skippedCards.length === 0}
+            title={cyclingMode ? 'Cycle to next skipped card' : (!canSkip && skippedCards.length > 0 ? 'Click to review skipped cards' : '')}
+          >
+            {cyclingMode ? 'Next Skipped Card' : (!canSkip && skippedCards.length > 0 ? 'Review Skipped' : 'Skip')}
           </button>
           <button className="game-button correct-button" onClick={handleCorrect}>
             Correct
@@ -147,7 +269,7 @@ function Game({ words, timeLimit, onEndGame }) {
         </div>
       </div>
 
-      <div className="score-display">
+      <div className="score-display desktop-only">
         <div className="score-item">
           <span className="score-label">Correct:</span>
           <span className="score-value correct">{correctCount}</span>
